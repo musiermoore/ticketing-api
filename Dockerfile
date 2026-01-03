@@ -1,0 +1,55 @@
+# -------------------------------
+# Stage 1: Build / Composer dependencies
+# -------------------------------
+FROM php:8.2-fpm-alpine AS base
+
+# Set working directory
+WORKDIR /var/www/html
+
+# Install system dependencies
+RUN apk add --no-cache \
+    bash \
+    git \
+    curl \
+    libpng-dev \
+    libjpeg-turbo-dev \
+    libwebp-dev \
+    freetype-dev \
+    zip \
+    unzip \
+    oniguruma-dev \
+    icu-dev \
+    libxml2-dev \
+    composer \
+    npm
+
+# Install PHP extensions
+RUN docker-php-ext-install pdo pdo_pgsql bcmath mbstring exif pcntl gd intl xml opcache
+
+# Copy composer files
+COPY composer.json composer.lock ./
+
+# Install PHP dependencies
+RUN composer install --no-autoloader --no-scripts
+
+# Copy entire application
+COPY . .
+
+# Generate autoload files
+RUN composer dump-autoload --optimize
+
+# -------------------------------
+# Stage 2: Dev or Production entrypoint
+# -------------------------------
+# For dev, expose php artisan serve
+# For prod, you can use php-fpm + nginx
+EXPOSE 8000
+
+# Environment variable for Laravel
+ENV APP_ENV=local
+ENV APP_DEBUG=true
+ENV LOG_CHANNEL=stack
+
+# Start Laravel dev server
+CMD php artisan serve --host=0.0.0.0 --port=8000
+    
