@@ -1,7 +1,7 @@
 # -------------------------------
 # Stage 1: Build / Composer dependencies
 # -------------------------------
-FROM php:8.2-fpm-alpine AS base
+FROM php:8.4-fpm-alpine AS base
 
 # Set working directory
 WORKDIR /var/www/html
@@ -11,6 +11,7 @@ RUN apk add --no-cache \
     bash \
     git \
     curl \
+    postgresql-dev \
     libpng-dev \
     libjpeg-turbo-dev \
     libwebp-dev \
@@ -20,14 +21,20 @@ RUN apk add --no-cache \
     oniguruma-dev \
     icu-dev \
     libxml2-dev \
-    composer \
-    npm
+    $PHPIZE_DEPS \
+    libzip-dev \
+    autoconf \
+    make \
+    g++
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo pdo_pgsql bcmath mbstring exif pcntl gd intl xml opcache
+RUN docker-php-ext-install pdo pdo_pgsql bcmath mbstring exif pcntl gd intl xml opcache zip
 
 # Copy composer files
 COPY composer.json composer.lock ./
+
+# Install Composer globally
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # Install PHP dependencies
 RUN composer install --no-autoloader --no-scripts
