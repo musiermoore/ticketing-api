@@ -35,4 +35,12 @@ return [
         ],
     ],
 
+    'auth_service' => [
+        'base_url' => env('AUTH_BASE_URL'),
+    ],
+
+    'booking_service' => [
+        'base_url' => env('BOOKING_SERVICE_BASE_URL'),
+    ],
+
 ];
