@@ -4,14 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Place extends Model
 {
     /** @use HasFactory<\Database\Factories\PlaceFactory> */
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
-    public function address(): MorphTo
+    public function address(): MorphOne
     {
         return $this->morphOne(Address::class, 'addressable');
     }

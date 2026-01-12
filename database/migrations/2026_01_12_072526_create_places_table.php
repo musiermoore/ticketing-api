@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('timezone_id');
 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

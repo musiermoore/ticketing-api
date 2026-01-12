@@ -14,11 +14,14 @@ return new class extends Migration
         Schema::create('event_times', function (Blueprint $table) {
             $table->id();
 
+            $table->foreignId('event_id')->constrained()->cascadeOnDelete();
+
             $table->date('date');
             $table->time('time');
             $table->integer('ticket_count')->default(0);
 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

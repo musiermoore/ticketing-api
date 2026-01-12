@@ -14,9 +14,11 @@ return new class extends Migration
         Schema::create('events', function (Blueprint $table) {
             $table->id();
 
+            $table->foreignId('place_id')->constrained()->cascadeOnDelete();
             $table->string('title');
 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
