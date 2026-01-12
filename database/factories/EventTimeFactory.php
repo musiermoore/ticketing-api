@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Event;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -9,6 +10,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class EventTimeFactory extends Factory
 {
+    protected static array $eventIds = [];
+
     /**
      * Define the model's default state.
      *
@@ -16,7 +19,13 @@ class EventTimeFactory extends Factory
      */
     public function definition(): array
     {
+        if (!self::$eventIds) {
+            self::$eventIds = Event::pluck('id')->toArray();
+        }
+
         return [
+            'event_id' => $this->faker->randomElement(self::$eventIds),
+
             'date' => $this->faker->dateTimeBetween('now', '+3 months')->format('Y-m-d'),
 
             // Event-friendly times (not 03:17 AM)

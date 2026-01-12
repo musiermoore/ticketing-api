@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Place;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -9,6 +10,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class EventFactory extends Factory
 {
+    protected static array $placeIds = [];
+
     /**
      * Define the model's default state.
      *
@@ -16,7 +19,12 @@ class EventFactory extends Factory
      */
     public function definition(): array
     {
+        if (!self::$placeIds) {
+            self::$placeIds = Place::pluck('id')->toArray();
+        }
+
         return [
+            'place_id' => $this->faker->randomElement(self::$placeIds),
             'title' => $this->faker->words(3, true)
         ];
     }

@@ -25,13 +25,4 @@ class PlaceFactory extends Factory
             'timezone_id' => $this->faker->timezone('RU'),
         ];
     }
-
-    public function configure()
-    {
-        return $this->afterCreating(function (Place $place) {
-            $place->address()->create(
-                Address::factory()->make()->toArray()
-            );
-        });
-    }
 }

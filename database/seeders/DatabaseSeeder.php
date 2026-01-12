@@ -6,7 +6,6 @@ use App\Models\Address;
 use App\Models\Event;
 use App\Models\EventTime;
 use App\Models\Place;
-use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -19,8 +18,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        Place::factory(10000);
-        Event::factory(1000000);   
-        EventTime::factory(100000000);
+        Place::factory()
+            ->count(100)
+            ->has(Address::factory())
+            ->create();
+        Event::factory()->count(10000)->create();
+        EventTime::factory()->count(10000)->create();
     }
 }
