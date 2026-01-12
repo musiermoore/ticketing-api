@@ -36,6 +36,9 @@ COPY composer.json composer.lock ./
 # Install Composer globally
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
+RUN echo "opcache.enable=0" > /usr/local/etc/php/conf.d/opcache-dev.ini \
+    && echo "opcache.enable_cli=0" >> /usr/local/etc/php/conf.d/opcache-dev.ini
+
 # Install PHP dependencies
 RUN composer install --no-autoloader --no-scripts
 
@@ -56,7 +59,4 @@ EXPOSE 8000
 ENV APP_ENV=local
 ENV APP_DEBUG=true
 ENV LOG_CHANNEL=stack
-
-# Start Laravel dev server
-CMD php artisan serve --host=0.0.0.0 --port=8000
     
