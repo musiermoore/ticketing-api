@@ -48,11 +48,6 @@ COPY . .
 # Generate autoload files
 RUN composer dump-autoload --optimize
 
-# -------------------------------
-# Stage 2: Dev or Production entrypoint
-# -------------------------------
-# For dev, expose php artisan serve
-# For prod, you can use php-fpm + nginx
 EXPOSE 8000
 
 # Environment variable for Laravel
@@ -60,3 +55,4 @@ ENV APP_ENV=local
 ENV APP_DEBUG=true
 ENV LOG_CHANNEL=stack
     
+CMD php artisan serve --host=0.0.0.0 --port=8000
