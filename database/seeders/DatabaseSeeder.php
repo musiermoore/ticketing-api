@@ -2,6 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Address;
+use App\Models\Event;
+use App\Models\EventTime;
+use App\Models\Place;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -15,11 +19,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        Place::factory(10000);
+        Event::factory(1000000);   
+        EventTime::factory(100000000);
     }
 }
