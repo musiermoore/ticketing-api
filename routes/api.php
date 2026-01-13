@@ -8,5 +8,5 @@ Route::middleware('jwt')->group(function () {
         return json_encode(jwt_user());
     });
 
-    Route::apiResource('events', EventController::class);
+    Route::apiResource('events', EventController::class)->only(['index', 'show']);
 });
