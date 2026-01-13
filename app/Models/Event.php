@@ -12,6 +12,11 @@ class Event extends Model
     /** @use HasFactory<\Database\Factories\EventFactory> */
     use HasFactory, SoftDeletes;
 
+    protected $fillable = [
+        'place_id',
+        'title',
+    ];
+
     public function place(): BelongsTo
     {
         return $this->belongsTo(Place::class);
