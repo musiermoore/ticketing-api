@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreEventRequest;
 use App\Http\Requests\UpdateEventRequest;
+use App\Http\Resources\EventResource;
 use App\Models\Event;
 use Illuminate\Http\JsonResponse;
 
@@ -14,10 +15,13 @@ class EventController extends Controller
      */
     public function index(): JsonResponse
     {
-        $events = Event::paginate(50)->withQueryString();
+        $events = Event::with([
+            'place',
+            'times'
+        ])->paginate(50)->withQueryString();
 
         return response()->json([
-            'events' => $events
+            'events' => EventResource::collection($events)
         ]);
     }
 
@@ -30,7 +34,7 @@ class EventController extends Controller
 
         return response()->json([
             'message' => 'Event created successfully',
-            'event' => $event
+            'event' => $event->toResource()
         ], 201);
     }
 
@@ -41,9 +45,7 @@ class EventController extends Controller
     {
         $event = Event::findOrFail($id);
 
-        return response()->json([
-            'event' => $event
-        ]);
+        return response()->json($event->toResource());
     }
 
     /**
@@ -56,7 +58,7 @@ class EventController extends Controller
 
         return response()->json([
             'message' => 'Event updated successfully',
-            'event' => $event
+            'event' => $event->toResource()
         ]);
     }
 
